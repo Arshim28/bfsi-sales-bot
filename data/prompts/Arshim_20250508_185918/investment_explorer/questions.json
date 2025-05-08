@@ -1,0 +1,42 @@
+[
+  {
+    "question": "I'm new to investing. Can you explain in simple terms what types of investment options are available through YONO?",
+    "context": "The client is a beginner and needs a high-level overview of investment products offered on the YONO platform. Prepare to explain mutual funds, stocks, and bonds in a simplified manner, highlighting their basic characteristics and potential risk/return profiles."
+  },
+  {
+    "question": "I've heard about mutual funds. Can you tell me what kind of mutual funds are available on YONO, and what are the typical returns and risks associated with them?",
+    "context": "The client has some awareness of mutual funds and seeks specific details about the offerings on YONO. Be prepared to categorize the mutual funds available (e.g., equity, debt, hybrid), provide examples of specific funds, and explain the risk levels (low, medium, high) and potential return ranges based on historical data and market conditions. Disclose that past performance is not indicative of future results."
+  },
+  {
+    "question": "How does YONO help me understand my risk appetite before I start investing?",
+    "context": "The client is interested in risk assessment tools. Explain if YONO has a questionnaire or other mechanisms to gauge risk tolerance and suggest suitable investment options based on the results. Detail how this process works within the YONO app."
+  },
+  {
+    "question": "I want to invest for my child's future education, which is about 10 years away. What investment options on YONO would be suitable for a long-term goal like this?",
+    "context": "The client has a specific long-term financial goal. Suggest investment options with a longer time horizon, such as equity mutual funds or balanced funds, that can potentially offer higher returns over time. Explain the benefits of starting early and the power of compounding. Also, mention the availability of goal-based investment options if YONO provides them."
+  },
+  {
+    "question": "How secure is YONO for making investments and managing my money? What security measures are in place?",
+    "context": "The client is concerned about the security of the platform. Describe the security features implemented in YONO, such as encryption, two-factor authentication, biometric login, and fraud detection mechanisms. Reassure the client about SBI's security protocols and data protection policies."
+  },
+  {
+    "question": "What are the fees and charges associated with investing through YONO?",
+    "context": "The client is interested in understanding the cost of investing. Clearly explain any fees associated with using the YONO platform for investments, such as account maintenance fees, transaction fees, or commission charges. Also, discuss expense ratios for mutual funds and other applicable charges."
+  },
+  {
+    "question": "Can I track the performance of my investments on YONO, and how often is the portfolio updated?",
+    "context": "The client wants to know about portfolio tracking features. Explain how YONO allows users to monitor their investment performance and the frequency of updates (e.g., daily, weekly, monthly). Describe the available performance metrics and reporting tools."
+  },
+  {
+    "question": "What happens if I need to withdraw my investment before the intended investment horizon? Are there any penalties or restrictions?",
+    "context": "The client is concerned about liquidity and potential penalties. Explain the withdrawal process for different investment options and any associated penalties for early withdrawals, such as exit loads for mutual funds. Highlight the liquidity of different investment products."
+  },
+  {
+    "question": "Does YONO offer any tax-saving investment options, like ELSS funds, and how do they work?",
+    "context": "The client is interested in tax-efficient investments. Explain the availability of tax-saving investment options like Equity Linked Savings Schemes (ELSS) on YONO. Describe the tax benefits associated with these investments and the lock-in period."
+  },
+  {
+    "question": "If I have questions or need assistance with my investments on YONO, is there a customer support channel available?",
+    "context": "The client wants to know about support options. Explain the available customer support channels for YONO investment users, such as phone support, email support, in-app chat, or branch assistance. Provide details on how to access these support channels and the typical response times."
+  }
+]

@@ -1,0 +1,42 @@
+[
+  {
+    "question": "What exactly is YONO, and is it safe to use on my phone?",
+    "context": "The client is new to digital banking and concerned about security. They need a simple explanation of YONO and reassurance about its safety features, emphasizing SBI's reputation."
+  },
+  {
+    "question": "I've heard about YONO Cash. Can I really withdraw money from an ATM without my card using it? How does that work?",
+    "context": "The client is interested in YONO Cash due to limited banking infrastructure in their area. They need a step-by-step explanation of how to use YONO Cash for ATM withdrawals and assurance that it's secure."
+  },
+  {
+    "question": "I mainly need to send money to my relatives in other villages. Is YONO easy to use for that, and will I be charged extra for sending money?",
+    "context": "The client's primary need is fund transfers. The response should highlight YONO's ease of use for UPI/BHIM transfers and clarify any associated transaction fees."
+  },
+  {
+    "question": "I'm not very good with phones. If I have trouble setting up YONO or using it, is there someone I can talk to for help?",
+    "context": "The client anticipates needing assistance with the app. The response should provide information about available customer support channels (e.g., phone, branch visits) and reassure them that help is readily available."
+  },
+  {
+    "question": "I've always gone to the SBI branch for everything. Why should I use YONO instead of going to the branch?",
+    "context": "The client is accustomed to traditional banking methods. The response should emphasize the convenience and time-saving benefits of YONO, such as avoiding long trips to the branch for basic transactions."
+  },
+  {
+    "question": "Does YONO work even if the internet connection is slow in my village?",
+    "context": "The client is concerned about internet connectivity issues. The response should acknowledge the potential for slow speeds and suggest workarounds or alternative features that might be less data-intensive."
+  },
+  {
+    "question": "I saw something about loans on YONO. Can I apply for a small loan through the app, and what kind of documents will I need?",
+    "context": "The client is interested in loan options. The response should provide basic information about loan applications through YONO and outline the necessary documentation, mentioning that a physical branch visit might be needed for certain loan types."
+  },
+  {
+    "question": "My neighbor told me about offers on YONO. What kind of things can I buy with it, and are they safe to purchase?",
+    "context": "The client is curious about e-commerce offers. The response should highlight the types of products and services available on YONO and reassure them that purchases are secure through SBI's platform."
+  },
+  {
+    "question": "If I lose my phone, will my money in YONO be safe? What should I do if that happens?",
+    "context": "The client is concerned about security in case of phone loss. The response should explain the steps to take to secure their YONO account if their phone is lost or stolen, emphasizing the importance of PINs and passwords."
+  },
+  {
+    "question": "I'm worried about scams. How do I know if a message or call about YONO is really from SBI and not someone trying to trick me?",
+    "context": "The client is concerned about phishing scams. The response should provide tips on identifying genuine SBI communications and warn against sharing sensitive information over the phone or internet."
+  }
+]
