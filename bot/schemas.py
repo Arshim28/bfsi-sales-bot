@@ -64,7 +64,7 @@ class DocumentResponse(DocumentBase):
 class GenerationCreate(BaseModel):
     knowledge_base_id: int
     agent_persona_id: int
-    questions_per_client: Optional[int] = 50
+    questions_per_client: Optional[int] = 5
 
 
 class GenerationResponse(BaseModel):

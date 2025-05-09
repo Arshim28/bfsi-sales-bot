@@ -1,0 +1,22 @@
+[
+  {
+    "question": "If I send money to someone using YONO, how will I know if they actually received it?",
+    "context": "This client is new to digital fund transfers and is concerned about the reliability and confirmation of transactions. They are used to the tangible proof of a physical transaction and need reassurance that their money reaches the intended recipient."
+  },
+  {
+    "question": "Is it safe to put all my banking information on my phone? What if my phone gets lost or stolen?",
+    "context": "This client is hesitant about the security of mobile banking. They are worried about the potential risks of storing sensitive financial information on a device that could be compromised."
+  },
+  {
+    "question": "Can I use YONO in my local language, or is it only in English and Hindi?",
+    "context": "This client may not be proficient in English or Hindi and prefers to conduct banking in their native language. They want to know if the app supports regional languages to make it easier for them to understand and use."
+  },
+  {
+    "question": "I heard I can withdraw money from an ATM without my card using YONO. How does that work, and is it safe?",
+    "context": "This client is intrigued by the YONO Cash feature but wants to understand how it functions and whether it's a secure alternative to using a physical debit card, which they are more familiar with."
+  },
+  {
+    "question": "If I have a problem with YONO, like a transaction that didn't go through, can I still go to my local SBI branch for help?",
+    "context": "This client still values the option of in-person assistance and wants to know if they can rely on their local branch for support in case they encounter technical issues or difficulties while using the YONO app."
+  }
+]

@@ -1,0 +1,151 @@
+# Client Type: rural_new_adopter
+
+This client type represents individuals from rural or semi-urban areas who are relatively new to digital banking. They may have previously relied solely on traditional brick-and-mortar banking services. They are drawn to YONO due to its accessibility and the convenience of banking from their smartphones, especially given SBI's extensive branch network in rural areas. They are likely to be initially hesitant about using digital services and may require more guidance and support. The video KYC account opening feature is particularly appealing to them, as it eliminates the need to physically visit a branch. They are interested in basic banking services like funds transfer and bill payments and may be exploring loan options for agricultural or small business purposes. They appreciate the availability of YONO in regional languages and the potential for increased financial inclusion. This client type represents a significant growth opportunity for SBI, as they transition from traditional to digital banking.
+
+================================================================================
+
+## Q1: If I send money to someone using YONO, how will I know if they actually received it?
+
+Context: This client is new to digital fund transfers and is concerned about the reliability and confirmation of transactions. They are used to the tangible proof of a physical transaction and need reassurance that their money reaches the intended recipient.
+
+Response: Namaste! I understand you're wondering how you'll know if someone received money you sent through YONO. That's a very important question! Here's how it works:
+
+After you send money using YONO, you'll receive an immediate confirmation on your screen. This confirmation will include a transaction reference number. Think of it like a receipt for your transfer.
+
+But that's not all! YONO also provides these ways to track your payment:
+
+1.  **Transaction History:** You can check your transaction history within the YONO app. It lists all your past transactions, including the one you just made. The status will show as either 'Successful' (meaning the money reached the recipient), 'Pending' (meaning it's still being processed), or 'Failed' (meaning the transfer didn't go through).
+2.  **SMS Alerts:** SBI usually sends an SMS (text message) to your registered mobile number confirming that the transaction was successful. This message serves as another confirmation that the money has been sent.
+3.  **UPI Apps (if applicable):** If you used UPI to send the money, you can also check the transaction status within the UPI app you used (like BHIM). These apps usually provide a detailed history of all UPI transactions.
+
+If the status shows as 'Pending' for longer than expected (usually a few hours), or if it shows as 'Failed,' please check your account balance to ensure the money wasn't deducted. If the money was deducted and the transaction failed, please contact SBI customer care immediately, either through the YONO app or by visiting your nearest branch. They will be able to investigate the issue and resolve it for you.
+
+Using YONO for sending money is very secure, and these confirmation methods ensure you always know the status of your transactions. We want to make sure you feel confident and comfortable using our digital services!
+
+Key points:
+- You'll receive an immediate on-screen confirmation with a transaction reference number.
+- Check your transaction history within the YONO app for the status (Successful, Pending, or Failed).
+- SBI usually sends an SMS to your registered mobile number confirming successful transactions.
+- If the status is 'Pending' for too long or 'Failed,' contact SBI customer care.
+- You can also check the transaction status in any UPI app you used to send the money.
+
+--------------------------------------------------------------------------------
+
+## Q2: Is it safe to put all my banking information on my phone? What if my phone gets lost or stolen?
+
+Context: This client is hesitant about the security of mobile banking. They are worried about the potential risks of storing sensitive financial information on a device that could be compromised.
+
+Response: Namaste! I understand your concern about the safety of putting your banking information on your phone, especially considering the possibility of it getting lost or stolen. It's a very valid question, and I'm happy to explain how SBI YONO keeps your information secure. 
+
+Think of YONO as a very secure vault on your phone. Here's how we protect your banking information:
+
+*   **Multiple Layers of Security:** YONO uses several security measures. First, you have your phone's own security, like a PIN, fingerprint, or face unlock. Then, YONO itself requires a separate login ID and password. For transactions, we often use One-Time Passwords (OTPs) sent to your registered mobile number. This means even if someone gets hold of your phone and knows your YONO password, they still need that OTP to complete a transaction.
+
+*   **Encryption:** All the information that travels between your phone and SBI's servers is encrypted. This means it's scrambled in a way that makes it unreadable to anyone who might try to intercept it. It's like sending a letter in a secret code.
+
+*   **Device Binding:** YONO can be linked to only one device at a time. If someone tries to log in to your account from a different phone, they will be blocked and you'll be notified.
+
+*   **What to do if your phone is lost or stolen:** If your phone is lost or stolen, the first thing to do is immediately call SBI's customer care. They can block your YONO account to prevent any unauthorized access. You can also de-register your device by logging into YONO from another device or through internet banking, if available. Then, you can get a new SIM card with the same mobile number, and register YONO on a new phone.
+
+*   **YONO Cash:** If you use YONO Cash to withdraw money from ATMs without a debit card, remember that this feature also requires an OTP, adding another layer of security.
+
+*   **SBI's Commitment:** SBI invests heavily in security technologies and processes to protect your money and information. We are constantly monitoring for fraudulent activity and updating our security measures to stay ahead of potential threats.
+
+So, while it's wise to be cautious, rest assured that SBI YONO incorporates robust security measures to protect your banking information. Remember to keep your passwords strong and never share your OTP with anyone. If you have any further questions or concerns, please don't hesitate to ask!
+
+Key points:
+- YONO uses multiple layers of security, including device-level security, YONO login, and OTPs.
+- All data transmitted between your phone and SBI servers is encrypted.
+- If your phone is lost or stolen, you should immediately contact SBI customer care to block your YONO account.
+- YONO can be linked to only one device at a time, preventing unauthorized access from other devices.
+- SBI is committed to investing in security technologies and processes to protect your information.
+
+--------------------------------------------------------------------------------
+
+## Q3: Can I use YONO in my local language, or is it only in English and Hindi?
+
+Context: This client may not be proficient in English or Hindi and prefers to conduct banking in their native language. They want to know if the app supports regional languages to make it easier for them to understand and use.
+
+Response: Namaste! I understand you're wondering about the language options available on SBI YONO. That's a great question! 
+
+While YONO is certainly available in English and Hindi, I'm happy to tell you that SBI recognizes the importance of serving our customers in their preferred languages. To best answer your question, please check the application settings once you have downloaded the app, to check if your local language is available. This feature is especially helpful for our customers in rural and semi-urban areas who are more comfortable banking in their native language.
+
+With YONO, you can enjoy the convenience of banking from your smartphone, including features like:
+
+*   **Funds Transfer:** Easily send money to friends and family using UPI/BHIM.
+*   **Video KYC Account Opening:** Open an account without needing to visit a branch in person. This is especially helpful if you live far from a branch or have difficulty traveling.
+*   **Bill Payments:** Pay your utility bills and other dues directly through the app.
+*   **Loan Applications:** Explore loan options for agriculture or small business needs.
+
+We also have dedicated support to help you navigate the app and answer any questions you may have along the way. We want to make your transition to digital banking as smooth as possible! I hope this information is helpful. Please let me know if you have any other questions.
+
+Key points:
+- YONO is available in English and Hindi.
+- The app may have the option to select your local language.
+- YONO offers convenient features like funds transfer, video KYC, and bill payments.
+- SBI provides support to help users navigate the app.
+
+--------------------------------------------------------------------------------
+
+## Q4: I heard I can withdraw money from an ATM without my card using YONO. How does that work, and is it safe?
+
+Context: This client is intrigued by the YONO Cash feature but wants to understand how it functions and whether it's a secure alternative to using a physical debit card, which they are more familiar with.
+
+Response: Namaste! I understand you're curious about withdrawing money from an ATM without your card using YONO. It's a great feature called 'YONO Cash' and it's designed to be both convenient and safe. Let me explain how it works and address your safety concerns.
+
+Here’s how YONO Cash works:
+
+1.  **Initiate the Withdrawal:** You start the process on your YONO app. Log in and select 'YONO Cash'.
+2.  **Enter Amount and Set PIN:** You'll enter the amount you want to withdraw and set a temporary 6-digit YONO Cash PIN. This PIN is crucial, so remember it!
+3.  **Visit an SBI ATM:** Go to any SBI ATM that supports YONO Cash. These ATMs will display the YONO Cash option on the screen.
+4.  **Enter Details at ATM:** At the ATM, select 'YONO Cash' on the screen. You'll be prompted to enter the YONO Cash PIN you created in the app, as well as the reference number you received on your registered mobile number via SMS.
+5.  **Collect Your Cash:** Once you've entered the correct details, the ATM will dispense your cash.
+
+**Now, about safety:**
+
+YONO Cash is very secure for a few reasons:
+
+*   **Two-Factor Authentication:** It requires both your YONO app login and the separate YONO Cash PIN, making it difficult for someone else to withdraw money even if they have your card.
+*   **Temporary PIN:** The YONO Cash PIN is only valid for a limited time (usually a few hours), so even if someone were to learn your PIN, they wouldn't be able to use it after it expires.
+*   **No Card Needed:** Since you don't need your physical card, there's no risk of card skimming or theft at the ATM.
+*   **SMS Alerts:** You'll receive SMS alerts throughout the process, so you'll be notified if any YONO Cash transaction is initiated.
+
+Essentially, YONO Cash adds extra layers of security compared to using your physical card. It's a convenient way to withdraw money without worrying about card theft or skimming. Feel free to ask if you have any more questions. We also have video tutorials available in regional languages within the YONO app that might be helpful.
+
+Key points:
+- YONO Cash allows cardless ATM withdrawals through the YONO app.
+- The process involves initiating the withdrawal in the app, setting a temporary PIN, and then using that PIN along with a reference number at a YONO Cash enabled SBI ATM.
+- YONO Cash is secure because it uses two-factor authentication (app login and separate PIN) and the PIN is only valid for a short period.
+- Not needing a physical card eliminates the risk of card skimming or theft.
+- SMS alerts notify you of any YONO Cash transactions.
+
+--------------------------------------------------------------------------------
+
+## Q5: If I have a problem with YONO, like a transaction that didn't go through, can I still go to my local SBI branch for help?
+
+Context: This client still values the option of in-person assistance and wants to know if they can rely on their local branch for support in case they encounter technical issues or difficulties while using the YONO app.
+
+Response: Namaste! Thanks for asking about getting help with YONO. I understand that using digital banking can sometimes be a little confusing, especially when things don't go as planned. 
+
+Yes, absolutely! Even though YONO is a digital platform, SBI understands that you might sometimes need in-person assistance. If you have any issues with YONO, like a transaction that failed or any other problem, you can definitely visit your local SBI branch for help. Our branch staff are trained to assist you with YONO-related queries and issues.
+
+Think of YONO as an extension of your local branch. It's there for your convenience, but your branch is always there as a backup and for more complex issues.
+
+Here's what you can expect when you go to the branch:
+
+1.  **Tell them about the problem:** Explain clearly what happened with your YONO transaction or issue.
+2.  **Provide details:** Have any relevant details handy, such as the transaction date, amount, and any reference numbers you might have.
+3.  **Branch staff will help:** The staff will investigate the issue and guide you on how to resolve it. They can also help you understand how to avoid similar problems in the future.
+
+We want to make sure you feel comfortable and supported as you use YONO. Your local branch is a valuable resource for that!
+
+
+Key points:
+- You can visit your local SBI branch for help with YONO issues.
+- Branch staff are trained to assist with YONO-related queries.
+- Explain your problem clearly and provide relevant details.
+- The branch will investigate and guide you on resolving the issue.
+- Your local branch is a valuable resource for YONO support.
+
+--------------------------------------------------------------------------------
+

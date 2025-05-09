@@ -413,9 +413,9 @@ def show_generations_page():
                 
                 questions_per_client = st.slider(
                     "Questions per Client Type",
-                    min_value=10,
+                    min_value=5,
                     max_value=100,
-                    value=50,
+                    value=10,
                     step=5
                 )
                 

@@ -1,0 +1,22 @@
+[
+  {
+    "question": "How secure is YONO for making UPI transactions, especially considering the increasing number of online fraud cases?",
+    "context": "This client is digitally savvy but also aware of cybersecurity risks. They want assurance that YONO has robust security measures in place to protect their funds during UPI transfers."
+  },
+  {
+    "question": "Can I apply for a personal loan entirely through the YONO app, and what documents are required?",
+    "context": "This client prefers a completely digital experience and wants to avoid visiting a branch. They need to know the loan application process within the app and what documentation is necessary."
+  },
+  {
+    "question": "What kind of offers and discounts can I expect when shopping through YONO's e-commerce partners?",
+    "context": "This client is drawn to the lifestyle aspect of YONO and wants to understand the potential savings and benefits of using the app for online shopping. They are looking for tangible value beyond banking services."
+  },
+  {
+    "question": "What is the daily transaction limit for YONO Cash withdrawals, and are there any associated fees?",
+    "context": "This client is interested in the convenience of YONO Cash and wants to know the limitations and costs associated with using this feature for ATM withdrawals without a card."
+  },
+  {
+    "question": "If I open a new savings account through YONO, how long does it take for the account to be fully activated and accessible?",
+    "context": "This client values speed and efficiency. They want to know the timeframe for account activation after completing the digital account opening process to start using the account immediately."
+  }
+]

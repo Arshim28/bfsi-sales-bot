@@ -5,12 +5,12 @@ from pathlib import Path
 from typing import List, Dict, Any, Optional
 import re
 import glob
+from datetime import datetime
 
 from dotenv import load_dotenv
-from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.output_parsers import StrOutputParser
-from langchain_core.pydantic_v1 import BaseModel, Field
+from google import genai
+from google.genai import types
+from pydantic import BaseModel, Field
 
 from .utils import setup_logger
 
@@ -37,113 +37,66 @@ class PromptSetAnalysis(BaseModel):
     improvement_suggestions: List[str] = Field(description="Overall suggestions for improvement")
     summary: str = Field(description="Executive summary of the analysis")
 
-def init_llm(temperature: float = 0.2) -> ChatGoogleGenerativeAI:
-    """
-    Initialize a more advanced Google Gemini model for analysis.
-    
-    Args:
-        temperature: Creativity parameter for the model generation.
-        
-    Returns:
-        An instance of ChatGoogleGenerativeAI.
-    """
+def init_llm():
     try:
         api_key = os.getenv("GOOGLE_API_KEY")
         if not api_key:
             raise ValueError("GOOGLE_API_KEY environment variable not set")
         
-        llm = ChatGoogleGenerativeAI(
-            model="gemini-2.5-pro-exp-03-25",  
-            google_api_key=api_key,
-            temperature=temperature,
-            top_p=0.95,
-            max_tokens=20000
-        )
-        logger.info("Successfully initialized Google Gemini model for analysis")
-        return llm
+        client = genai.Client(api_key=api_key)
+        logger.info("Successfully initialized Google Gemini client for analysis")
+        return client
     except Exception as e:
         logger.error(f"Failed to initialize LLM: {e}", exc_info=True)
         raise
 
-def read_prompt_file(file_path: str) -> Dict[str, Any]:
-    """
-    Read and parse a prompt file.
-    
-    Args:
-        file_path: Path to the prompt file.
-        
-    Returns:
-        Dictionary containing client_type, description, and a list of question-response pairs.
-    """
+def read_client_type_data(client_dir: Path) -> Dict[str, Any]:
     try:
-        with open(file_path, 'r', encoding='utf-8') as file:
-            content = file.read()
+        client_type_file = client_dir / "client_type.json"
+        questions_file = client_dir / "questions.json"
+        responses_file = client_dir / "responses.json"
         
-        client_type = Path(file_path).stem.replace('_prompt', '')
+        if not all(f.exists() for f in [client_type_file, questions_file, responses_file]):
+            logger.warning(f"Missing files in {client_dir}")
+            return None
         
-        sections = content.split('=' * 80)
-        if len(sections) < 2:
-            raise ValueError(f"Invalid prompt file format: {file_path}")
+        # Read client type data
+        with open(client_type_file, 'r', encoding='utf-8') as f:
+            client_data = json.load(f)
         
-        header = sections[0].strip()
-        description_lines = header.split('\n')
-        if len(description_lines) < 2:
-            raise ValueError(f"Invalid prompt file header: {file_path}")
+        # Read questions data
+        with open(questions_file, 'r', encoding='utf-8') as f:
+            questions_data = json.load(f)
         
-        description = '\n'.join(description_lines[1:]).strip()
+        # Read responses data
+        with open(responses_file, 'r', encoding='utf-8') as f:
+            responses_data = json.load(f)
         
-        qa_content = sections[1]
-        qa_pairs = qa_content.split('-' * 80)
-        
-        pairs = []
-        for pair in qa_pairs:
-            pair = pair.strip()
-            if not pair:
-                continue
-                
-            question_match = re.search(r'##\s+Q\d+:\s+(.*?)\n', pair)
-            context_match = re.search(r'Context:\s+(.*?)\n\n', pair)
-            response_match = re.search(r'Response:\s+(.*?)\n\nKey points:', pair, re.DOTALL)
-            
-            if question_match and response_match:
-                question = question_match.group(1).strip()
-                context = context_match.group(1).strip() if context_match else ""
-                response = response_match.group(1).strip()
-                
-                key_points_text = pair.split('Key points:')[-1].strip()
-                key_points = [
-                    point.lstrip('- ').strip() 
-                    for point in key_points_text.split('\n') 
-                    if point.strip() and point.startswith('-')
-                ]
-                
-                pairs.append({
-                    'question': question,
-                    'context': context,
-                    'response': response,
-                    'key_points': key_points
-                })
-        
-        return {
-            'client_type': client_type,
-            'description': description,
-            'qa_pairs': pairs
+        # Create prompt data structure
+        prompt_data = {
+            'client_type': client_data.get('client_type', client_dir.name),
+            'description': client_data.get('description', ''),
+            'qa_pairs': []
         }
-    except Exception as e:
-        logger.error(f"Failed to read prompt file {file_path}: {e}", exc_info=True)
-        raise
-
-def analyze_client_type(llm: ChatGoogleGenerativeAI, prompt_data: Dict[str, Any]) -> ClientTypeAnalysis:
-    """
-    Analyze a client type prompt file.
-    
-    Args:
-        llm: The language model.
-        prompt_data: Dictionary containing client_type, description, and qa_pairs.
         
-    Returns:
-        ClientTypeAnalysis object.
-    """
+        # Match questions with responses
+        for response in responses_data:
+            question_text = response.get('question', '')
+            matching_question = next((q for q in questions_data if q.get('question') == question_text), {})
+            
+            prompt_data['qa_pairs'].append({
+                'question': question_text,
+                'context': matching_question.get('context', ''),
+                'response': response.get('response', ''),
+                'key_points': response.get('key_points', [])
+            })
+        
+        return prompt_data
+    except Exception as e:
+        logger.error(f"Failed to read client type data from {client_dir}: {e}", exc_info=True)
+        return None
+
+def analyze_client_type(client: genai.Client, prompt_data: Dict[str, Any]) -> ClientTypeAnalysis:
     logger.info(f"Analyzing client type: {prompt_data['client_type']}")
     
     try:
@@ -162,63 +115,59 @@ Response: {qa['response']}
 Key Points: {', '.join(qa['key_points'])}
 """
         
-        prompt = ChatPromptTemplate.from_messages([
-            ("system", """
-            You are an expert financial services analyst tasked with evaluating the quality of 
-            AI-generated client personas, questions, and responses for a BFSI (Banking, Financial 
-            Services, and Insurance) sales chatbot.
-            
-            Analyze the following client type, description, and question-answer samples. Provide 
-            an in-depth assessment of their quality, relevance, and effectiveness for a sales context.
-            
-            Client Type: {client_type}
-            
-            Description:
-            {description}
-            
-            Sample Questions and Responses:
-            {qa_samples}
-            
-            Your analysis should include:
-            1. Evaluation of the client type description (quality rating 1-10, detailed feedback)
-            2. Evaluation of the questions (quality rating 1-10, detailed feedback)
-            3. Evaluation of the responses (quality rating 1-10, detailed feedback)
-            4. Specific suggestions for improvement
-            
-            Focus on assessing:
-            - Relevance to financial services sales
-            - Accuracy and depth of financial knowledge
-            - Appropriateness for the client type
-            - Natural language quality
-            - Sales effectiveness
-            - Potential issues or concerns
-            
-            Format your response as a valid JSON object with the following structure:
-            {{
-                "description_quality": <rating 1-10>,
-                "description_feedback": "<detailed feedback>",
-                "question_quality": <rating 1-10>,
-                "question_feedback": "<detailed feedback>",
-                "response_quality": <rating 1-10>,
-                "response_feedback": "<detailed feedback>",
-                "improvement_suggestions": ["suggestion1", "suggestion2", ...]
-            }}
-            """),
-        ])
+        prompt = f"""
+        You are an expert financial services analyst tasked with evaluating the quality of 
+        AI-generated client personas, questions, and responses for a BFSI (Banking, Financial 
+        Services, and Insurance) sales chatbot.
         
-        chain = (
-            prompt 
-            | llm 
-            | StrOutputParser()
+        Analyze the following client type, description, and question-answer samples. Provide 
+        an in-depth assessment of their quality, relevance, and effectiveness for a sales context.
+        
+        Client Type: {prompt_data['client_type']}
+        
+        Description:
+        {prompt_data['description']}
+        
+        Sample Questions and Responses:
+        {qa_sample_formatted}
+        
+        Your analysis should include:
+        1. Evaluation of the client type description (quality rating 1-10, detailed feedback)
+        2. Evaluation of the questions (quality rating 1-10, detailed feedback)
+        3. Evaluation of the responses (quality rating 1-10, detailed feedback)
+        4. Specific suggestions for improvement
+        
+        Focus on assessing:
+        - Relevance to financial services sales
+        - Accuracy and depth of financial knowledge
+        - Appropriateness for the client type
+        - Natural language quality
+        - Sales effectiveness
+        - Potential issues or concerns
+        
+        Format your response as a valid JSON object with the following structure:
+        {{
+            "description_quality": <rating 1-10>,
+            "description_feedback": "<detailed feedback>",
+            "question_quality": <rating 1-10>,
+            "question_feedback": "<detailed feedback>",
+            "response_quality": <rating 1-10>,
+            "response_feedback": "<detailed feedback>",
+            "improvement_suggestions": ["suggestion1", "suggestion2", ...]
+        }}
+        """
+        
+        response = client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                temperature=0.2,
+                top_p=0.95,
+                max_output_tokens=8192
+            )
         )
         
-        result = chain.invoke({
-            "client_type": prompt_data['client_type'],
-            "description": prompt_data['description'],
-            "qa_samples": qa_sample_formatted
-        })
-        
-        result = result.strip()
+        result = response.text.strip()
         
         start_idx = result.find('{')
         end_idx = result.rfind('}') + 1
@@ -262,21 +211,10 @@ Key Points: {', '.join(qa['key_points'])}
         )
 
 def create_overall_analysis(
-    llm: ChatGoogleGenerativeAI, 
+    client: genai.Client, 
     username: str, 
     client_analyses: List[ClientTypeAnalysis]
 ) -> PromptSetAnalysis:
-    """
-    Create an overall analysis based on individual client type analyses.
-    
-    Args:
-        llm: The language model.
-        username: Username associated with the prompt set.
-        client_analyses: List of ClientTypeAnalysis objects.
-        
-    Returns:
-        PromptSetAnalysis object.
-    """
     logger.info(f"Creating overall analysis for user: {username}")
     
     try:
@@ -293,55 +231,47 @@ Response Feedback: {analysis.response_feedback}
 Improvement Suggestions: {', '.join(analysis.improvement_suggestions)}
 """
         
-        # Create a prompt template
-        prompt = ChatPromptTemplate.from_messages([
-            ("system", """
-            You are an expert financial services analyst tasked with providing an overall assessment
-            of a set of AI-generated BFSI (Banking, Financial Services, and Insurance) sales chatbot prompts.
-            
-            Analyze the following individual client type analyses and create a comprehensive overall 
-            assessment of the entire prompt set.
-            
-            Username: {username}
-            
-            Individual Client Type Analyses:
-            {analyses}
-            
-            Your overall analysis should include:
-            1. An overall quality rating (1-10)
-            2. Major strengths across the entire prompt set
-            3. Major weaknesses or areas for improvement
-            4. Strategic improvement suggestions
-            5. A brief executive summary (1-2 paragraphs)
-            
-            Format your response as a valid JSON object with the following structure:
-            {{
-                "overall_quality": <rating 1-10>,
-                "strengths": ["strength1", "strength2", ...],
-                "weaknesses": ["weakness1", "weakness2", ...],
-                "improvement_suggestions": ["suggestion1", "suggestion2", ...],
-                "summary": "<executive summary>"
-            }}
-            """),
-        ])
+        prompt = f"""
+        You are an expert financial services analyst tasked with providing an overall assessment
+        of a set of AI-generated BFSI (Banking, Financial Services, and Insurance) sales chatbot prompts.
         
-        # Create the chain
-        chain = (
-            prompt 
-            | llm 
-            | StrOutputParser()
+        Analyze the following individual client type analyses and create a comprehensive overall 
+        assessment of the entire prompt set.
+        
+        Username: {username}
+        
+        Individual Client Type Analyses:
+        {analyses_formatted}
+        
+        Your overall analysis should include:
+        1. An overall quality rating (1-10)
+        2. Major strengths across the entire prompt set
+        3. Major weaknesses or areas for improvement
+        4. Strategic improvement suggestions
+        5. A brief executive summary (1-2 paragraphs)
+        
+        Format your response as a valid JSON object with the following structure:
+        {{
+            "overall_quality": <rating 1-10>,
+            "strengths": ["strength1", "strength2", ...],
+            "weaknesses": ["weakness1", "weakness2", ...],
+            "improvement_suggestions": ["suggestion1", "suggestion2", ...],
+            "summary": "<executive summary>"
+        }}
+        """
+        
+        response = client.models.generate_content(
+            model="gemini-2.5-pro-exp-03-25",
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                temperature=0.2,
+                top_p=0.95,
+                max_output_tokens=16000
+            )
         )
         
-        # Execute the chain
-        result = chain.invoke({
-            "username": username,
-            "analyses": analyses_formatted
-        })
+        result = response.text.strip()
         
-        # Parse the results
-        result = result.strip()
-        
-        # Extract JSON
         start_idx = result.find('{')
         end_idx = result.rfind('}') + 1
         if start_idx == -1 or end_idx == 0:
@@ -383,45 +313,31 @@ Improvement Suggestions: {', '.join(analysis.improvement_suggestions)}
         )
 
 def save_analysis_report(analysis: PromptSetAnalysis, output_file: Path):
-    """
-    Save the analysis report to a file.
-    
-    Args:
-        analysis: PromptSetAnalysis object.
-        output_file: Path to save the report.
-    """
     try:
-        # Ensure the parent directory exists
         os.makedirs(output_file.parent, exist_ok=True)
         
         with open(output_file, 'w', encoding='utf-8') as file:
-            # Write the header
             file.write(f"# BFSI Sales Bot Prompt Analysis for {analysis.username}\n\n")
             
-            # Write executive summary
             file.write("## Executive Summary\n\n")
             file.write(f"{analysis.summary}\n\n")
             file.write(f"**Overall Quality Rating:** {analysis.overall_quality}/10\n\n")
             
-            # Write overall strengths
             file.write("## Overall Strengths\n\n")
             for strength in analysis.strengths:
                 file.write(f"- {strength}\n")
             file.write("\n")
             
-            # Write overall weaknesses
             file.write("## Overall Weaknesses\n\n")
             for weakness in analysis.weaknesses:
                 file.write(f"- {weakness}\n")
             file.write("\n")
             
-            # Write overall improvement suggestions
             file.write("## Strategic Improvement Suggestions\n\n")
             for suggestion in analysis.improvement_suggestions:
                 file.write(f"- {suggestion}\n")
             file.write("\n")
             
-            # Write detailed analysis for each client type
             file.write("## Detailed Client Type Analyses\n\n")
             for client_analysis in analysis.client_type_analyses:
                 file.write(f"### Client Type: {client_analysis.client_type}\n\n")
@@ -449,57 +365,54 @@ def save_analysis_report(analysis: PromptSetAnalysis, output_file: Path):
         raise
 
 def analyze_prompts(username: str, prompts_dir: Optional[Path] = None, output_dir: Optional[Path] = None):
-    """
-    Analyze all prompt files for a user.
-    
-    Args:
-        username: Username to analyze prompts for.
-        prompts_dir: Directory containing prompt files. Defaults to ../prompts/.
-        output_dir: Directory to save analysis reports. Defaults to ../analysis/.
-    
-    Returns:
-        Path to the generated analysis report.
-    """
     try:
         logger.info(f"Starting analysis for user: {username}")
         
-        # Set up paths
         base_dir = Path(__file__).resolve().parent.parent
         if prompts_dir is None:
             prompts_dir = base_dir / "prompts"
         if output_dir is None:
             output_dir = base_dir / "analysis"
         
-        # Ensure directories exist
         os.makedirs(prompts_dir, exist_ok=True)
         os.makedirs(output_dir, exist_ok=True)
         
-        # Find all prompt files for this user
-        prompt_pattern = os.path.join(prompts_dir, "*_prompt.txt")
-        prompt_files = glob.glob(prompt_pattern)
+        if Path(prompts_dir).is_dir():
+            client_type_dirs = [d for d in Path(prompts_dir).iterdir() if d.is_dir()]
+            
+            if not client_type_dirs:
+                user_dir_glob = list(Path(prompts_dir).glob(f"{username}*"))
+                if user_dir_glob:
+                    for user_dir in user_dir_glob:
+                        if user_dir.is_dir():
+                            client_type_dirs.extend([d for d in user_dir.iterdir() if d.is_dir()])
         
-        if not prompt_files:
-            logger.error(f"No prompt files found in {prompts_dir}")
-            raise FileNotFoundError(f"No prompt files found in {prompts_dir}")
+        if not client_type_dirs:
+            logger.error(f"No client type directories found in {prompts_dir}")
+            raise FileNotFoundError(f"No client type directories found in {prompts_dir}")
         
-        logger.info(f"Found {len(prompt_files)} prompt files to analyze")
+        logger.info(f"Found {len(client_type_dirs)} client type directories to analyze")
         
-        # Initialize LLM
-        llm = init_llm()
+        client = init_llm()
         
-        # Read and analyze each prompt file
         client_analyses = []
-        for file_path in prompt_files:
-            prompt_data = read_prompt_file(file_path)
-            analysis = analyze_client_type(llm, prompt_data)
+        for client_dir in client_type_dirs:
+            prompt_data = read_client_type_data(client_dir)
+            
+            if not prompt_data:
+                continue
+                
+            analysis = analyze_client_type(client, prompt_data)
             client_analyses.append(analysis)
         
-        # Create overall analysis
-        overall_analysis = create_overall_analysis(llm, username, client_analyses)
+        if not client_analyses:
+            logger.error("No client types could be analyzed")
+            raise ValueError("No client types could be analyzed")
         
-        # Save analysis report
-        timestamp = Path(__file__).resolve().stat().st_mtime
-        report_file = output_dir / f"{username}_analysis_{int(timestamp)}.md"
+        overall_analysis = create_overall_analysis(client, username, client_analyses)
+        
+        timestamp = int(datetime.now().timestamp())
+        report_file = output_dir / f"{username}_analysis_{timestamp}.md"
         save_analysis_report(overall_analysis, report_file)
         
         logger.info(f"Analysis completed for user: {username}. Report saved to {report_file}")

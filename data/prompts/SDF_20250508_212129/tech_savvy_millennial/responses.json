@@ -1,0 +1,55 @@
+[
+  {
+    "question": "How secure is YONO for making UPI transactions, especially considering the increasing number of online fraud cases?",
+    "response": "Hey there! Thanks for asking about YONO's security for UPI transactions. I understand your concern, especially with online fraud on the rise. Security is a top priority for us at SBI, and we've built YONO with several layers of protection to keep your money and information safe. \n\nHere\u2019s a breakdown of how we ensure your UPI transactions on YONO are secure:\n\n1.  **Multi-Factor Authentication:** YONO uses multi-factor authentication. This means that in addition to your password or PIN, you may need to use a one-time password (OTP) sent to your registered mobile number or biometric authentication (like fingerprint or facial recognition) to complete transactions. This makes it much harder for unauthorized users to access your account, even if they somehow get hold of your login details.\n\n2.  **Secure App Environment:** The YONO app itself is designed with robust security protocols. We regularly update the app with the latest security patches to protect against vulnerabilities. We also employ encryption to protect your data while it's being transmitted between your device and our servers.\n\n3.  **UPI PIN Security:** For every UPI transaction, you need to enter your UPI PIN. This PIN is known only to you and is not stored by SBI. Always keep this PIN confidential and never share it with anyone.\n\n4.  **Transaction Limits:** YONO allows you to set transaction limits for UPI payments. This limits the amount that can be transacted in a single transaction or over a period of time, which can help mitigate potential losses in case of fraud.\n\n5. **Real-time Monitoring:** SBI employs advanced fraud detection systems that monitor transactions in real-time for suspicious activity. If a transaction is flagged as potentially fraudulent, it may be blocked or delayed, and you may be contacted to verify its authenticity.\n\n**Important Tips for You:**\n\n*   **Keep your app updated:** Always use the latest version of the YONO app to benefit from the newest security features and bug fixes.\n*   **Be cautious of phishing:** Be wary of suspicious emails, messages, or phone calls asking for your personal or financial information. SBI will never ask for your sensitive information through these channels.\n*   **Use a strong UPI PIN:** Choose a UPI PIN that is difficult to guess and avoid using easily identifiable information like your birthdate or phone number.\n*   **Monitor your transactions regularly:** Keep an eye on your account activity and report any unauthorized transactions immediately.\n\nWe are committed to providing a secure and convenient banking experience with YONO. If you have any further questions or concerns, please don't hesitate to ask!",
+    "key_points": [
+      "YONO uses multi-factor authentication, including OTPs and biometrics, for enhanced security.",
+      "The YONO app is regularly updated with security patches and employs encryption to protect your data.",
+      "UPI PIN is crucial for authorizing transactions and should be kept confidential.",
+      "Transaction limits can be set to mitigate potential losses from fraudulent activities.",
+      "SBI employs real-time monitoring and fraud detection systems to identify and block suspicious transactions."
+    ]
+  },
+  {
+    "question": "Can I apply for a personal loan entirely through the YONO app, and what documents are required?",
+    "response": "Hey there! Great question about personal loans on YONO. Yes, you can absolutely apply for a personal loan entirely through the YONO app \u2013 that's one of its coolest features for someone like you who's always on the go. \n\nThe process is designed to be super convenient and paperless. Once you're logged in, navigate to the 'Loans' section within the app. You'll find the personal loan option there. The app will guide you through the application, step by step.\n\nNow, regarding documents, since everything is digital, you'll typically need scanned copies or clear photos of the following:\n\n1.  **Proof of Identity:** This could be your Aadhaar card, PAN card, or passport.\n2.  **Proof of Address:** Aadhaar card, passport, utility bills (like electricity or water bills) are generally accepted.\n3.  **Income Proof:** This is usually your salary slips for the last few months or your bank statement showing your salary credits. The exact duration (e.g., 3 months, 6 months) will be specified in the app during the application.\n4.  **Bank Statements:** Statements showing your transaction history (typically for the last 6 months) may be needed to assess your repayment capacity.\n\nKeep in mind, the specific document requirements might vary slightly depending on your individual profile and SBI's current policies. The YONO app will clearly outline exactly what you need to upload during the application process. The app also gives real-time updates on your application status, so you're never left wondering what's happening.\n\nHope this helps! Let me know if you have any other questions.",
+    "key_points": [
+      "You can apply for a personal loan entirely through the YONO app.",
+      "The application process is designed to be paperless and convenient.",
+      "Required documents typically include proof of identity, address, and income.",
+      "Scanned copies or photos of documents are uploaded through the app.",
+      "The YONO app provides real-time updates on your application status."
+    ]
+  },
+  {
+    "question": "What kind of offers and discounts can I expect when shopping through YONO's e-commerce partners?",
+    "response": "Hey there! Thanks for asking about the shopping perks on YONO. I understand you're looking for the scoop on deals and discounts you can snag when shopping through our e-commerce partners. \n\nYONO has tie-ups with a wide range of merchants, and the offers are constantly being updated to keep things fresh. So, while I can't give you a live, up-to-the-minute list right now (those change almost daily!), I can tell you the kinds of things you can generally expect:\n\n*   **Exclusive Discounts:** We work hard to get YONO users special discounts that you won't find anywhere else. These can range from percentage-based discounts (like 10% or 20% off) to fixed-amount discounts on specific products or brands.\n*   **Cashback Offers:** Keep an eye out for cashback deals! You might get a certain percentage of your purchase amount back as cashback, which is credited to your SBI account. This is a great way to save even more.\n*   **Special Promotions:** During festivals, holidays, and other special occasions, you'll often find themed promotions with bigger discounts and bundled offers. These are usually heavily advertised within the YONO app, so stay tuned.\n*   **Category-Specific Deals:** Depending on what you're shopping for, you might find deals tailored to specific categories like fashion, electronics, travel, or groceries. For example, you might see discounts on flight bookings or special offers on electronics during a tech sale.\n\nTo see the very latest and greatest offers, the best place to check is directly within the YONO app. Just head to the 'Shop & Order' section. You'll find all the current deals and promotions neatly organized there. Happy shopping!",
+    "key_points": [
+      "YONO offers exclusive discounts, cashback offers, and special promotions through its e-commerce partners.",
+      "Discounts can be percentage-based or fixed-amount, depending on the merchant and promotion.",
+      "Cashback offers provide a percentage of the purchase amount back to the user's SBI account.",
+      "Special promotions are common during festivals and holidays, offering larger discounts and bundled deals.",
+      "The 'Shop & Order' section of the YONO app is the best place to find the latest and most up-to-date offers."
+    ]
+  },
+  {
+    "question": "What is the daily transaction limit for YONO Cash withdrawals, and are there any associated fees?",
+    "response": "Hey there! Great question about YONO Cash withdrawals. I understand you're looking for info on daily limits and fees. \n\nCurrently, you can withdraw a maximum of \u20b920,000 per transaction using YONO Cash. You can make multiple withdrawals in a day, but the total daily limit is also \u20b920,000. So, you can't exceed that amount in a single day across all your YONO Cash transactions. \n\nGood news is, there are no associated fees for using the YONO Cash feature. It's a free service for SBI customers using the YONO app. It's designed for convenient, cardless ATM withdrawals, so you can access your money without needing your physical debit card.\n\nTo recap, the daily withdrawal limit is \u20b920,000 and there are no fees for using YONO Cash. Hope this helps!",
+    "key_points": [
+      "The maximum withdrawal amount per YONO Cash transaction is \u20b920,000.",
+      "The total daily YONO Cash withdrawal limit is \u20b920,000.",
+      "There are no fees associated with using the YONO Cash feature.",
+      "YONO Cash allows for cardless ATM withdrawals."
+    ]
+  },
+  {
+    "question": "If I open a new savings account through YONO, how long does it take for the account to be fully activated and accessible?",
+    "response": "Hey there! Thanks for checking out YONO for opening your new savings account. It's a super convenient way to get started with SBI. \n\nGenerally, if you complete the entire process online, including the Video KYC (Know Your Customer) verification, your account should be fully activated and accessible pretty quickly \u2013 usually within a few hours to a maximum of one business day. The speed depends on how smoothly the KYC process goes. Make sure you have all your documents handy during the video call to avoid any delays.\n\nHere's a quick rundown of what happens after you submit your application:\n\n1.  **Application Review:** Our team reviews your application details.\n2.  **Video KYC:** You'll complete a video call for identity verification. This is crucial for activating your account.\n3.  **Account Activation:** Once the KYC is successful, your account gets activated, and you can start using all the YONO features, like UPI transfers, bill payments, and exploring investment options. You can also use YONO Cash for cardless ATM withdrawals.\n\nSo, you'll be banking digitally with SBI in no time! Let me know if you have any other questions.",
+    "key_points": [
+      "Account activation typically takes a few hours to one business day after completing Video KYC.",
+      "Successful completion of Video KYC is essential for quick account activation.",
+      "Once activated, you can immediately access all YONO features, including UPI, bill payments, and investments.",
+      "Have all necessary documents ready for Video KYC to avoid delays."
+    ]
+  }
+]

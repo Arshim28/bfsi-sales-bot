@@ -14,7 +14,7 @@ from psycopg.errors import Error as PsycopgError
 from pathlib import Path
 
 from .database import (
-    get_db, init_db, 
+    get_db, init_db, get_db_connection,
     # User operations
     create_user, get_user_by_username, get_user_by_email,
     # Document operations
@@ -39,7 +39,7 @@ from .auth import (
 )
 from .utils import setup_logger
 from .parser import parse_document
-from .creator import create_prompts
+from .creator import create_prompts, format_final_outputs
 from .analyzer import analyze_prompts
 
 # Setup logger
@@ -201,10 +201,19 @@ async def upload_document(
 
 async def process_document_task(document_id: int):
     """Process document in background."""
-    db_document = get_document(document_id)
-    if not db_document:
-        logger.error(f"Document not found: {document_id}")
-        return
+    # Create a new database connection specific to this background task
+    with get_db_connection() as conn:
+        # Create a cursor to use for database operations
+        cursor = conn.cursor()
+        
+        # Get document using cursor directly instead of get_document function
+        cursor.execute("SELECT * FROM documents WHERE id = ?", (document_id,))
+        db_document = cursor.fetchone()
+        if not db_document:
+            logger.error(f"Document not found: {document_id}")
+            return
+        
+        db_document = dict(db_document)  # Convert to dictionary
     
     try:
         # Construct a proper output path for the parsed document
@@ -231,12 +240,29 @@ async def process_document_task(document_id: int):
         except Exception as e:
             logger.error(f"Error reading content preview from {output_path}: {str(e)}") # Log output_path
         
-        # Update document record
-        updated_doc = update_document_processed(document_id, output_path, content_preview)
+        # Update document record with a new connection
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
+            now = datetime.utcnow().isoformat()
+            cursor.execute("""
+                UPDATE documents 
+                SET processed = 1, processed_at = ?, output_path = ?, content_preview = ?
+                WHERE id = ?
+            """, (now, output_path, content_preview, document_id))
+            conn.commit()
+            
         logger.info(f"Document processed successfully: {document_id}")
     except Exception as e:
         logger.error(f"Error processing document {document_id}: {str(e)}")
-        update_document_error(document_id, str(e))
+        # Update error with a new connection
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                UPDATE documents 
+                SET processing_error = ?
+                WHERE id = ?
+            """, (str(e), document_id))
+            conn.commit()
 
 
 @app.get("/documents", response_model=List[DocumentResponse])
@@ -360,18 +386,32 @@ async def process_generation_task(
     output_dir: str,
     questions_per_client: int
 ):
-    """Process generation in background."""
-    db_generation = get_generation(generation_id)
-    if not db_generation:
-        logger.error(f"Generation not found: {generation_id}")
-        return
-    
-    # Fetch the username associated with this generation for logging purposes
-    log_username = db_generation.get('username', f"user_{db_generation['user_id']}")
+    # Create a new database connection specific to this background task
+    with get_db_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM generations WHERE id = ?", (generation_id,))
+        db_generation = cursor.fetchone()
+        if not db_generation:
+            logger.error(f"Generation not found: {generation_id}")
+            return
+        
+        db_generation = dict(db_generation)
+        
+        # Get username for this generation
+        cursor.execute("SELECT username FROM users WHERE id = ?", (db_generation['user_id'],))
+        user_result = cursor.fetchone()
+        log_username = user_result['username'] if user_result else f"user_{db_generation['user_id']}"
 
     try:
         # Update status to processing
-        update_generation_status(generation_id, "processing")
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                UPDATE generations 
+                SET status = ?
+                WHERE id = ?
+            """, ("processing", generation_id))
+            conn.commit()
         
         # Ensure output_dir (which is specific to this generation) is a Path object for creator
         generation_specific_output_dir = Path(output_dir)
@@ -387,7 +427,14 @@ async def process_generation_task(
         
         if not client_type_objects:
             logger.error(f"create_prompts returned no client types for generation_id: {generation_id}")
-            update_generation_status(generation_id, "failed", "Failed to generate client types in creator module")
+            with get_db_connection() as conn:
+                cursor = conn.cursor()
+                cursor.execute("""
+                    UPDATE generations 
+                    SET status = ?, error_message = ?
+                    WHERE id = ?
+                """, ("failed", "Failed to generate client types in creator module", generation_id))
+                conn.commit()
             return
 
         # Create client type records and count questions
@@ -397,24 +444,118 @@ async def process_generation_task(
         for client_obj in client_type_objects:
             client_output_filename = generation_specific_output_dir / f"{client_obj.client_type}_prompt.txt"
 
-            create_client_type(
-                generation_id,
-                client_obj.client_type,
-                client_obj.description,
-                len(getattr(client_obj, 'questions', [])),
-                str(client_output_filename)
-            )
+            # Create client_type with new connection
+            with get_db_connection() as conn:
+                cursor = conn.cursor()
+                now = datetime.utcnow().isoformat()
+                cursor.execute("""
+                    INSERT INTO client_types 
+                    (generation_id, name, description, question_count, output_file, created_at)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                """, (
+                    generation_id, 
+                    client_obj.client_type, 
+                    client_obj.description, 
+                    len(getattr(client_obj, 'questions', [])),
+                    str(client_output_filename),
+                    now
+                ))
+                conn.commit()
+            
             client_type_count += 1
+            question_count += len(getattr(client_obj, 'questions', []))
+        
+        # Update generation with counts
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                UPDATE generations 
+                SET client_types_count = ?, questions_count = ?
+                WHERE id = ?
+            """, (client_type_count, question_count, generation_id))
+            conn.commit()
+        
+        # Create the final output files
+        server_bot_persona, kb_qa_path, _ = format_final_outputs(
+            generation_specific_output_dir, 
+            log_username
+        )
+        
+        # Perform analysis automatically
+        try:
+            # Create analysis output path
+            analysis_dir = Path("data/analysis")
+            os.makedirs(analysis_dir, exist_ok=True)
+            timestamp = int(datetime.now().timestamp())
+            analysis_path = analysis_dir / f"{log_username}_analysis_{timestamp}.md"
+            
+            # Update generation record with analysis path
+            with get_db_connection() as conn:
+                cursor = conn.cursor()
+                cursor.execute("""
+                    UPDATE generations 
+                    SET analysis_path = ?
+                    WHERE id = ?
+                """, (str(analysis_path), generation_id))
+                conn.commit()
+            
+            # Run analyzer
+            from .analyzer import analyze_prompts
+            analyze_prompts(
+                username=log_username,
+                prompts_dir=generation_specific_output_dir,
+                output_dir=analysis_dir
+            )
+            
+            # Mark analysis as completed
+            with get_db_connection() as conn:
+                cursor = conn.cursor()
+                now = datetime.utcnow().isoformat()
+                cursor.execute("""
+                    UPDATE generations 
+                    SET analysis_completed = 1, analysis_completed_at = ?
+                    WHERE id = ?
+                """, (now, generation_id))
+                conn.commit()
+            
+            logger.info(f"Analysis completed automatically for generation {generation_id}")
+        except Exception as e:
+            logger.error(f"Error in automatic analysis for generation {generation_id}: {str(e)}")
+            with get_db_connection() as conn:
+                cursor = conn.cursor()
+                cursor.execute("""
+                    UPDATE generations 
+                    SET analysis_error = ?
+                    WHERE id = ?
+                """, (str(e), generation_id))
+                conn.commit()
         
         # Update generation status to completed
-        update_generation_status(generation_id, "completed")
-        logger.info(f"Generation task marked completed for: {generation_id}. Detailed client type/question counts need to be confirmed.")
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
+            now = datetime.utcnow().isoformat()
+            cursor.execute("""
+                UPDATE generations 
+                SET status = ?, completed_at = ?
+                WHERE id = ?
+            """, ("completed", now, generation_id))
+            conn.commit()
+            
+        logger.info(f"Generation completed for {generation_id}. Created {client_type_count} client types with {question_count} questions.")
+        logger.info(f"Final outputs: Persona: {server_bot_persona}, KB: {kb_qa_path}")
 
     except Exception as e:
         # Handle errors
         logger.error(f"Error in generation task {generation_id}: {str(e)}", exc_info=True)
-        update_generation_status(generation_id, "failed", str(e))
-
+        # Update status with new connection
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                UPDATE generations 
+                SET status = ?, error_message = ?
+                WHERE id = ?
+            """, ("failed", str(e), generation_id))
+            conn.commit()
 
 @app.get("/generations", response_model=List[GenerationResponse])
 async def get_generations_route(
@@ -537,23 +678,44 @@ async def process_analysis_task(
     analysis_path: str
 ):
     """Process analysis in background."""
-    generation = get_generation(generation_id)
-    if not generation:
-        logger.error(f"Generation not found: {generation_id}")
-        return
+    # Create a new database connection specific to this background task
+    with get_db_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM generations WHERE id = ?", (generation_id,))
+        generation = cursor.fetchone()
+        if not generation:
+            logger.error(f"Generation not found: {generation_id}")
+            return
+        
+        generation = dict(generation)
     
     try:
         # Run analyzer script
         analyze_prompts(prompts_dir, analysis_path)
         
-        # Update generation record
-        complete_generation_analysis(generation_id)
+        # Update generation record with new connection
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
+            now = datetime.utcnow().isoformat()
+            cursor.execute("""
+                UPDATE generations 
+                SET analysis_completed = 1, analysis_completed_at = ?
+                WHERE id = ?
+            """, (now, generation_id))
+            conn.commit()
         
         logger.info(f"Analysis task completed for generation: {generation_id}")
     except Exception as e:
-        # Handle errors
+        # Handle errors with new connection
         logger.error(f"Error in analysis task for generation {generation_id}: {str(e)}")
-        update_generation_analysis_error(generation_id, str(e))
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                UPDATE generations 
+                SET analysis_error = ?
+                WHERE id = ?
+            """, (str(e), generation_id))
+            conn.commit()
 
 
 @app.get("/analysis/{generation_id}")
